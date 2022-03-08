@@ -1,6 +1,8 @@
+import qs from 'qs';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { PList, User, } from '../../types/a';
+import { cleanObejct } from '../../utils/cleanObject';
 import List from './list';
 import SearchPanel from './search-panel';
 
@@ -17,7 +19,7 @@ const ProjectList: React.FunctionComponent<IProjectListProps> = (props) => {
     const [user, setUser] = useState<User[]>([])
     const [list, setList] = useState<PList[]>([])
     useEffect(() => {
-        fetch(`http://localhost:3004/projects?name=${params.name}&personId=${params.personId}`).then(
+        fetch(`http://localhost:3004/projects?${qs.stringify(cleanObejct(params))}`).then(
             async response => {
                 if (response.ok) {
                     setList(await response.json())
