@@ -1,8 +1,8 @@
 import qs from 'qs';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { PList, User, } from '../../types/a';
-import { cleanObejct } from '../../utils/cleanObject';
+import { PList, User, paramType } from '../../types/a';
+import { cleanObejct, useDebounce } from '../../utils/cleanObject';
 import List from './list';
 import SearchPanel from './search-panel';
 
@@ -10,14 +10,15 @@ interface IProjectListProps {
 }
 
 
-const apiUrl = process.env.REACT_APP_API_URL
+// const apiUrl = process.env.REACT_APP_API_URL
 const ProjectList: React.FunctionComponent<IProjectListProps> = (props) => {
-    const [params, setParams] = useState({
+    const [params, setParams] = useState<paramType>({
         name: "",
         personId: ""
     })
     const [user, setUser] = useState<User[]>([])
     const [list, setList] = useState<PList[]>([])
+    const debounce = useDebounce(params,1000)
     useEffect(() => {
         fetch(`http://localhost:3004/projects?${qs.stringify(cleanObejct(params))}`).then(
             async response => {
@@ -26,7 +27,7 @@ const ProjectList: React.FunctionComponent<IProjectListProps> = (props) => {
                 }
             }
         )
-    }, [params])
+    }, [debounce])
     useEffect(() => {
         fetch(`http://localhost:3004/users`).then(
             async response => {

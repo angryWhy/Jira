@@ -3,7 +3,7 @@ import { paramType, User } from '../../types/a';
 
 interface ISearchPanelProps {
     params:paramType,
-    setParams:Function
+    setParams:(params:ISearchPanelProps["params"])=>void
     user:User[]
 }
 
