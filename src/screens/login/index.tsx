@@ -3,7 +3,6 @@ import * as React from 'react';
 
 interface ILoginProps {
 }
-
 const Login: React.FunctionComponent<ILoginProps> = (props) => {
     function lg(param:{userName:string,password :string}) {
         fetch(`http://localhost:3004/login`,{
