@@ -28,4 +28,5 @@ export const useAuth = () =>{
     if(!context){
         throw new Error("必须在Provider中使用");
     }
+    return context
 }
