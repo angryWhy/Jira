@@ -34,7 +34,7 @@ const Login: React.FunctionComponent<ILoginProps> = (props) => {
                     <Input type="text" placeholder='用户名' />
                 </Form.Item>
                 <Form.Item name="password " rules={[{ required: true, message: "请输入密码" }]}>
-                    <Input type="password" placeholder='用户名' />
+                    <Input type="password" placeholder='密码' />
                 </Form.Item>
                 <Form.Item>
                     <Button type='primary' htmlType='submit' >登录</Button>

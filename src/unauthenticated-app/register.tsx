@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useAuth } from '../context/auth-context';
+import { Button, Form, Input } from 'antd';
 
 
 
@@ -38,17 +39,17 @@ const Register: React.FunctionComponent<ILoginProps> = ({onerror}) => {
     }
     return (
         <div>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor='username'>用户名</label>
-                    <input type="text" />
-                </div>
-                <div>
-                    <label htmlFor='password'>密码</label>
-                    <input type="password" />
-                </div>
-                <button type='submit'>注册</button>
-            </form>
+            <Form onFinish={handleSubmit}>
+                <Form.Item>
+                    
+                    <Input type="text" />
+                </Form.Item>
+                <Form.Item name="password">
+                    
+                    <Input type="password" />
+                </Form.Item>
+                <Button htmlType='submit' type='primary' >注册</Button>
+            </Form>
         </div>
     )
 };
