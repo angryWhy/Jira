@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
 import { paramType } from '../types/a';
 
-export const isFasly = (value: number) => {
-    return value === 0 ? false : !value
+export const isFasly = (value: unknown) => {
+    return value===undefined || value===null ||value===""
 }
 type obj = Record<string, unknown>
 export const cleanObejct = <T extends obj, K extends keyof T>(object: T) => {

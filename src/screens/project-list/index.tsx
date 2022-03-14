@@ -7,6 +7,8 @@ import List from './list';
 import SearchPanel from './search-panel';
 import { useAsync } from '../../utils/useAsync';
 import { useHttp } from '../../utils/http';
+import styled from '@emotion/styled';
+import { useDocumentTitle } from '../../utils/useDocument';
 interface IProjectListProps {
 }
 // const apiUrl = process.env.REACT_APP_API_URL
@@ -17,9 +19,11 @@ const ProjectList: React.FunctionComponent<IProjectListProps> = (props) => {
     })
     const [user, setUser] = useState<User[]>([])
     const [list, setList] = useState<PList[]>([])
+    const [loading, setLoading] = useState(true)
     const debounce = useDebounce(params,1000)
     const cilent = useHttp()
     const {run,isLoading,error,data} = useAsync<PList[]>()
+    useDocumentTitle("项目列表",false)
     useEffect(() => {
         fetch(`http://localhost:3004/projects?${qs.stringify(cleanObejct(params))}`).then(
             async response => {
@@ -27,8 +31,8 @@ const ProjectList: React.FunctionComponent<IProjectListProps> = (props) => {
                     setList(await response.json())
                 }
             }
-        )
-    }, [debounce])
+        ).finally(()=>setLoading(false))
+    }, [debounce,params])
     useEffect(() => {
         fetch(`http://localhost:3004/users`).then(
             async response => {
@@ -39,11 +43,14 @@ const ProjectList: React.FunctionComponent<IProjectListProps> = (props) => {
         )
     }, [params])
     return (
-        <div>
+        <Container>
             <SearchPanel params={params} setParams={setParams} user={user} />
-            <List list={list} user={user} />
-        </div>
+            <List list={list} user={user} dataSource={list} loading={loading}/>
+        </Container>
     )
 };
+const Container = styled.div`
+padding: 3.2rem;
 
+` 
 export default ProjectList;

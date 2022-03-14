@@ -24,6 +24,7 @@ export const  useAsync = <D>(initialState?:State<D>) =>{
        stat:"error",
        data:null
     })
+    //开始启动，loading开始
     const run = (promise:Promise<D>) =>{
         if(!promise || !promise.then){
             throw new Error("请传入state数据类型")

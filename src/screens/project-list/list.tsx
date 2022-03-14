@@ -1,14 +1,20 @@
 import * as React from 'react';
 import { PList, User } from '../../types/a';
-import {Table} from "antd"
+import {Table, TableProps} from "antd"
+import dayjs from 'dayjs';
 interface IListProps {
     list: PList[],
-    user: User[]
+    user: User[],
+    
 }
-
-const List: React.FunctionComponent<IListProps> = ({ list, user }) => {
+interface ListProps extends TableProps<PList>{
+    user:User[],
+    list: PList[],
+    
+}
+const List: React.FunctionComponent<ListProps> = ({ user,...props }:ListProps) => {
     return(
-        <Table pagination={false} columns={[{title:"名称",dataIndex:"id",sorter:(a,b)=>a.name.localeCompare(b.name)},{
+        <Table<PList> pagination={false} columns={[{title:"名称",dataIndex:"id",sorter:(a,b)=>a.name.localeCompare(b.name)},{
             title:"负责人",
             render(value,project){
                 return(
@@ -17,32 +23,18 @@ const List: React.FunctionComponent<IListProps> = ({ list, user }) => {
                     </span>
                 )
             }
-        }]} dataSource={list} />
+        },
+        {title:"创建时间",render(value,project){
+            return<span>
+                {
+                    project.created?dayjs(project.created).format("YYYY--MM--DD"):"无"
+                }
+            </span>
+        }},
+        {title:"部门",dataIndex:"organization"},
+      
+    ]} {...props} />
     )
-    // return (
-    //     <div>
-    //         <table>
-    //             <thead>
-    //                 <tr>
-    //                     <th>名称</th>
-    //                     <th>负责人</th>
-    //                 </tr>
-    //             </thead>
-    //             <tbody>
-    //                 {
-    //                     list.map((project) => <tr key={project.id}>
-    //                         <td>
-    //                             {project.name}
-    //                         </td>
-    //                         <td>
-    //                             {user.find(user => user.id === project.personId)?.name || "未知"}
-    //                         </td>
-    //                     </tr>)
-    //                 }
-    //             </tbody>
-    //         </table>
-    //     </div>
-    // )
 };
 
 export default List;
