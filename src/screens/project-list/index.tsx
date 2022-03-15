@@ -9,6 +9,7 @@ import { useAsync } from '../../utils/useAsync';
 import { useHttp } from '../../utils/http';
 import styled from '@emotion/styled';
 import { useDocumentTitle } from '../../utils/useDocument';
+import { useUrlQueryParam } from '../../utils/url';
 interface IProjectListProps {
 }
 // const apiUrl = process.env.REACT_APP_API_URL
@@ -17,6 +18,8 @@ const ProjectList: React.FunctionComponent<IProjectListProps> = (props) => {
         name: "",
         personId: ""
     })
+    const [keys] = useState<("name"|"personId")[]>(["name","personId"])
+    const [param] = useUrlQueryParam(keys)
     const [user, setUser] = useState<User[]>([])
     const [list, setList] = useState<PList[]>([])
     const [loading, setLoading] = useState(true)

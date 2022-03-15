@@ -4,27 +4,50 @@ import ProjectList from './screens/project-list';
 import styled from '@emotion/styled';
 import { Row } from './components/lib';
 import {ReactComponent as Software} from './assets/software-logo.svg'
-
+import { Navigate, Route, Routes } from 'react-router';
+import { ProjectScreen } from './screens/Project';
+import { BrowserRouter as Router } from 'react-router-dom';
 export const  Authenticated = () =>{
-    const {logout} = useAuth()
+    
     return (<Container>
-        <Header>
-        <HeaderLeft gap={true}>
-            <Software width="18rem"></Software>
-            <HeaderItem>12312312</HeaderItem>
-        </HeaderLeft>
-        <HeaderRight>
-        <Button onClick={logout} type="link">登出</Button>
-        </HeaderRight>
-        </Header>
+        <PageHeader/>
         <Nav>nav</Nav>
         <Main>
-        <ProjectList/>
+        {/* <ProjectList/> */}
+        <Router>
+        <Routes>
+            <Route path="/projects" element={<ProjectList/>}/>
+            <Route path="/projects/:projectId/*" element={<ProjectScreen/>}/>
+            {/* <Route path="*" element={<Navigate to={window.location.pathname + "/kanban"}/>}/> */}
+        </Routes>
+        </Router>
         </Main>
         <Aside>aside</Aside>
         <Footer>footer </Footer>
     </Container>)
 }
+
+const PageHeader = () =>{
+    const {logout} = useAuth()
+    const resetHref = () =>{
+        window.location.href = window.location.origin
+    }
+    return(
+        <Header>
+        <HeaderLeft gap={true}>
+            <Button type='link' onClick={e=>{resetHref()}}>
+            <Software width="18rem"></Software>
+            </Button>
+            <HeaderItem>项目</HeaderItem>
+            <HeaderItem>用户</HeaderItem>
+        </HeaderLeft>
+        <HeaderRight>
+        <Button onClick={logout} type="link">登出</Button>
+        </HeaderRight>
+        </Header>
+    )
+}
+
 
 const Container = styled.div`
 display: grid;
