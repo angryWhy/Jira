@@ -1,14 +1,10 @@
-
-import ProjectList from './screens/project-list';
-import { UnAuthenticated } from './unauthenticated-app';
-import "antd/dist/antd.less"
-import { Authenticated } from './authenticated-app';
+// import ProjectList from "./components/Project/index";
+import Login from "./components/Login";
+import UnauthApp from "./components/unauthicatedapp";
 function App() {
   return (
     <div className="App">
-      {/* <ProjectList/>  */}
-      <Authenticated/>
-     {/* <UnAuthenticated/> */}
+      <UnauthApp/>
     </div>
   );
 }

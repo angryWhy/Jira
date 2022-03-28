@@ -1,36 +1,66 @@
-import React, { ReactNode, useContext, useState } from "react";
-import { User } from '../types/a';
-import * as auth from "../auth-provider"
+import React, { ReactNode } from "react";
+import { useState } from 'react';
 
-//就返回一个context组件--
+import * as auth from "../provider/auth-provider"
+import { User } from "../types/projectType";
+import { http } from "../utils/useHttp";
+import { useMount } from '../utils/useMount';
 
 
-//创建全局context,定义类型
-const AuthContext = React.createContext<{
-    user:User | null,
-    register:(form:User) =>Promise<void>,
-    login:(form:User) =>Promise<void>,
-    logout:() =>Promise<void> 
-} | undefined
-//undefined初始值
->(undefined)
-AuthContext.displayName = "AuthContext"
-
-//使用Provider，定义了方法，传给context，返回 真正的context
-export const AuthProvider = ({children}:{ children:ReactNode }) =>{
-    const [user, setUser] = useState<User|null>(null)
-    //login,user类型User|undefined，undefined是因为对结果只执行了if判断
-    //削参？？？
-    const login = (form :User) =>auth.login(form).then(setUser) 
-    const register = (form :User)=>auth.register(form).then(setUser) 
-    const logout = ()=>auth.logout().then(()=>setUser(null))
-    return <AuthContext.Provider value={{user,login,register,logout}} children={children}/>
+interface AuthForm {
+    username: string,
+    password: string
 }
-
-export const useAuth = () =>{
-    const context = useContext(AuthContext)
-    if(!context){
-        throw new Error("必须在Provider中使用");
+//localStorge里面找token，获得user
+const bootstrapUser = async()=>{
+    let user = null 
+    const token = auth.getToken()
+    if(token){
+        const data = await http("why",{token})
+        user = data.user
     }
-    return context
+    return user
+}
+//定义类型，Conetext
+const AuthContext = React.createContext<{
+    user: User | null;
+    register: (form: AuthForm) => Promise<void>;
+    login: (form: AuthForm) => void;
+    logout: () => Promise<void>;
+} | undefined>(undefined)
+AuthContext.displayName = "AuthContext"
+//组件当成children传递
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+    const [user, setUser] = useState<User | null>(null)
+    const login = (form: AuthForm) => {
+        console.log(form);
+        //自定义的变动
+        setUser({
+            id: "1",
+            name: "wzx",
+            personId: "123",
+            pin: true,
+            organization: "a",
+        })
+        // return auth.login(form).then(user => setUser(user))
+    }
+    const register = (form: AuthForm) => {
+
+        return auth.register(form).then(user => setUser(user))
+    }
+    const logout = () => {
+        return auth.logout().then(() => setUser(null))
+    }
+    useMount(()=>{
+        bootstrapUser().then(setUser)
+    })
+    return <AuthContext.Provider value={{ user, login, register, logout }} children={children} />
+}
+export const useAuth = () => {
+    //use使用context
+    const context = React.useContext(AuthContext);
+    if (!context) {
+        throw new Error("useAuth必须在AuthProvider中使用");
+    }
+    return context;
 }

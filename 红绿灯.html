@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function show() {
+            let arr = ["red", "geren", "yellow"]
+            let index = 0
+            const a = arr[index]
+            console.log(a);
+
+            return () => {
+                setInterval(() => {
+                    index++
+                    if(index===arr.length){
+                        index=0
+                    }     
+                    console.log(arr[index]);
+                }, 2000)
+            }
+        }
+        show()()
+    </script>
+</body>
+
+</html>
